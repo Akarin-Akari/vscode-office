@@ -1,8 +1,31 @@
-# Officew Viewer
+# Office Viewer
 
 ## Introduction
 
 English | [简体中文](README-CN.md) | [繁體中文](README-TW.md)
+
+> **This is a fork of [cweijan/vscode-office](https://github.com/cweijan/vscode-office) with Cursor compatibility fixes.**
+
+## Fork Changes
+
+### Cursor Compatibility Fix (v3.5.4-fork)
+
+The original extension stopped working in Cursor after a recent update. This fork fixes the compatibility issue by:
+
+- **Changed `MarkdownEditorProvider` from `CustomTextEditorProvider` to `CustomReadonlyEditorProvider`**
+  - Cursor modified the internal `TextDocument` retrieval mechanism, causing the original implementation to fail with "Unable to retrieve document from URI" error
+  - The new implementation manages document content directly using `vscode.workspace.fs` API instead of relying on VSCode's internal `TextDocument` mechanism
+
+- **Added custom `MarkdownDocument` class**
+  - Implements `vscode.CustomDocument` interface for self-managed document handling
+  - Uses `vscode.workspace.fs.readFile` and `writeFile` for file operations
+
+- **Added `FileSystemWatcher` for external file changes**
+  - Monitors file changes and syncs content with the editor
+
+This fix ensures the extension works on both **Cursor** and **VS Code** (including Antigravity and other VSCode-based editors).
+
+---
 
 This extension supports previewing these common office file formats in VS Code.
 
